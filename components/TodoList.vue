@@ -1,24 +1,33 @@
 <template>
-  <div class="bg-gray-900 text-white p-10 h-screen">
+  <div
+    class="relative text-white p-10 h-screen"
+    :style="{
+      backgroundImage:
+        'url(https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center center',
+      backgroundRepeat: 'no-repeat',
+    }"
+  >
     <h1 class="text-2xl font-bold mb-4 text-center">Todo List</h1>
-
     <form @submit.prevent="addTodo" class="flex items-center justify-center">
       <input
         v-model="newTodo"
         placeholder="New Todo"
-        class="bg-gray-800 text-white px-4 py-2 rounded-md mr-2"
+        class="bg-gray-800 shadow-lg text-white px-4 py-2 rounded-md mr-2"
       />
-      <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
+      <button
+        class="bg-gray-500 hover:bg-gray-600 opacity-60 text-white px-4 py-2 rounded-md shadow-lg"
+      >
         Add
       </button>
     </form>
     <p v-if="error" class="text-red-500 text-center mt-2">{{ error }}</p>
-
     <ul class="mt-4">
       <li
         v-for="todo in todos"
         :key="todo.id"
-        class="flex justify-between items-center mt-2"
+        class="flex justify-between items-center mt-2 lg:mx-80"
       >
         <div class="flex items-center">
           <input
@@ -31,19 +40,19 @@
             <template v-if="editId === todo.id">
               <input
                 v-model="todo.title"
-                class="bg-gray-800 text-white px-2 py-1 rounded-md mr-2"
+                class="bg-gray-800 mb-3 lg:mb-0 text-white px-2 lg:w-64 sm:w-48 w-16 py-1 rounded-md mr-2"
               />
               <button
                 @click="saveEdit(todo)"
-                class="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded-md mr-2"
+                class="bg-gray-500 shadow-lg opacity-60 hover:bg-green-600 text-white px-2 py-1 text-sm rounded-md mr-2"
               >
-                Save
+                <font-awesome-icon icon="save" /> Save
               </button>
               <button
                 @click="cancelEdit"
-                class="bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded-md"
+                class="bg-transparent shadow-lg hover:bg-gray-600 text-white px-2 py-1 text-sm rounded-md"
               >
-                Cancel
+                <font-awesome-icon icon="times" />
               </button>
             </template>
             <template v-else>
@@ -53,16 +62,17 @@
         </div>
         <div>
           <button
+            v-if="editId !== todo.id"
             @click="editTodo(todo.id)"
-            class="bg-yellow-500 hover:bg-yellow-600 mx-2 text-white px-2 py-1 rounded-md ml-2"
+            class="bg-transparent hover:bg-yellow-600 mx-2 text-gray-200 px-2 py-1 rounded-md ml-2 shadow-lg"
           >
-            Edit
+            <font-awesome-icon icon="edit" /> Edit
           </button>
           <button
             @click="deleteTodo(todo.id)"
-            class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-md"
+            class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-md shadow-lg opacity-65"
           >
-            Delete
+            <font-awesome-icon icon="trash-alt" /> Delete
           </button>
         </div>
       </li>
@@ -72,6 +82,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faEdit, faTrashAlt, faSave, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(faEdit, faTrashAlt, faSave, faTimes);
 
 const newTodo = ref("");
 const todos = ref<any[]>([]);

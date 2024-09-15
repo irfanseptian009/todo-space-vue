@@ -10,6 +10,9 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/vue-fontawesome": "^3.0.8",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@prisma/client": "^5.19.1",
     "nuxt": "^3.13.0",
