@@ -31,6 +31,32 @@
               {{ message.text }}
             </div>
           </div>
+          <!-- Tampilkan loading indicator -->
+          <div v-if="isLoading" class="flex justify-center my-4">
+            <div class="flex items-center">
+              <span class="text-gray-500">Loading...</span>
+              <svg
+                class="animate-spin ml-2 h-5 w-5 text-gray-500"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+            </div>
+          </div>
         </div>
 
         <!-- Input pesan dan tombol kirim -->
@@ -42,10 +68,12 @@
             @keypress.enter="sendMessage"
             placeholder="Type your message..."
             class="flex-grow p-3 border text-black bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 shadow-sm focus:ring-gray-500"
+            :disabled="isLoading"
           />
           <button
             @click="sendMessage"
             class="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            :disabled="isLoading"
           >
             Send
           </button>
@@ -67,6 +95,7 @@ interface Message {
 
 const input = ref<string>(""); // State untuk input pesan
 const messages = ref<Message[]>([]); // State untuk daftar pesan
+const isLoading = ref<boolean>(false); // State untuk loading
 
 // Konteks untuk chatbot
 const ChatbotContext: string = `Anda adalah seorang asisten virtual yang cerdas dan berempati. Tugas Anda adalah membantu pengguna mengatur waktu dan meningkatkan produktivitasnya. Saat pengguna meminta rekomendasi todo list, prioritaskan tugas-tugas yang paling penting dan mendesak. Gunakan teknik manajemen waktu seperti metode Eisenhower atau Pomodoro untuk memberikan saran yang efektif. Sesuaikan rekomendasi dengan gaya hidup dan preferensi pengguna. setiap mengetik pertama kali jawab dengan memperkenalkan kamu bahwa kamu seorang dukungan chatbot untuk sebuah Todolist membantu pengguna mengatur waktu dan meningkatkan produktivitasnya. `;
@@ -80,8 +109,9 @@ const config = useRuntimeConfig();
 
 // Fungsi untuk mengirim pesan
 async function sendMessage() {
-  if (input.value.trim() === "") return;
+  if (input.value.trim() === "" || isLoading.value) return; // Cegah input jika sedang loading
 
+  isLoading.value = true; // Set status loading ke true
   // Tambahkan pesan user ke daftar pesan
   messages.value.push({ role: "user", text: input.value });
   const userMessage = input.value;
@@ -95,6 +125,8 @@ async function sendMessage() {
     messages.value.push({ role: "model", text: cleanedResponse });
   } catch (error) {
     console.error("Error:", error);
+  } finally {
+    isLoading.value = false; // Set status loading ke false setelah respon diterima
   }
 }
 
