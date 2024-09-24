@@ -1,7 +1,7 @@
 <template>
   <div class="h-full overflow-y-auto">
     <div
-      class="flex flex-col text-yellow-500 font-extrabold bg-gray-400 p-8 shadow-md rounded-b-3xl mx-14"
+      class="flex flex-col text-yellow-500 font-extrabold bg-gray-400 p-5 shadow-md rounded-b-3xl mx-4"
     >
       Todo Chat-Bot
       <p class="text-xs text-gray-200 font-normal">
