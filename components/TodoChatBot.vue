@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-200 h-full overflow-y-auto">
+  <div class="h-full overflow-y-auto">
     <div
       class="flex flex-col text-yellow-500 font-extrabold bg-gray-400 p-8 shadow-md rounded-b-3xl mx-14"
     >

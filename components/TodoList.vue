@@ -1,5 +1,5 @@
 <template>
-  <div class="text-black p-4 sm:p-6 md:p-10 border-t-4">
+  <div class="text-black p-4 sm:p-6 md:p-10 border-t-4 bg-gray-100">
     <div class="text-center font-bold text-gray-500 text-1xl py-5">
       Create Your Todo List Here 👇
     </div>
@@ -29,7 +29,7 @@
 
     <p v-if="error" class="text-red-500 text-center mt-2">{{ error }}</p>
 
-    <ul class="mt-4 bg-gray-100 px-3 py-3 lg:py-10 rounded-lg shadow-xl lg:mx-28">
+    <ul class="mt-4 bg-gray-50 px-3 py-3 lg:py-10 rounded-lg shadow-xl lg:mx-28">
       <li
         v-for="todo in todos"
         :key="todo.id"
