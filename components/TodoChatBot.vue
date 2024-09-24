@@ -68,6 +68,13 @@ interface Message {
 const input = ref<string>(""); // State untuk input pesan
 const messages = ref<Message[]>([]); // State untuk daftar pesan
 
+// Konteks untuk chatbot
+const ChatbotContext: string = `Anda adalah seorang asisten virtual yang cerdas dan berempati. Tugas Anda adalah membantu pengguna mengatur waktu dan meningkatkan produktivitasnya. Saat pengguna meminta rekomendasi todo list, prioritaskan tugas-tugas yang paling penting dan mendesak. Gunakan teknik manajemen waktu seperti metode Eisenhower atau Pomodoro untuk memberikan saran yang efektif. Sesuaikan rekomendasi dengan gaya hidup dan preferensi pengguna. setiap mengetik pertama kali jawab dengan memperkenalkan kamu bahwa kamu seorang dukungan chatbot untuk sebuah Todolist membantu pengguna mengatur waktu dan meningkatkan produktivitasnya. `;
+const history = messages.value.map((message) => ({
+  role: message.role,
+  parts: [{ text: message.text }],
+}));
+
 // Mengambil environment variables dari runtimeConfig
 const config = useRuntimeConfig();
 
@@ -103,13 +110,6 @@ async function fetchGenerativeAIResponse(userInput: string): Promise<string> {
     const { GoogleGenerativeAI } = await import("@google/generative-ai");
     const genAI = new GoogleGenerativeAI(config.public.apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    // Konteks untuk chatbot
-    const ChatbotContext: string = `setiap mengetik pertama kali jawab dengan memperkenalkan kamu bahwa kamu seorang dukungan chatbot untuk sebuah Todolist membantu pengguna mengatur waktu dan meningkatkan produktivitasnya, Anda adalah seorang asisten virtual yang cerdas dan berempati. Tugas Anda adalah membantu pengguna mengatur waktu dan meningkatkan produktivitasnya. Saat pengguna meminta rekomendasi todo list, prioritaskan tugas-tugas yang paling penting dan mendesak. Gunakan teknik manajemen waktu seperti metode Eisenhower atau Pomodoro untuk memberikan saran yang efektif. Sesuaikan rekomendasi dengan gaya hidup dan preferensi pengguna. `;
-    const history = messages.value.map((message) => ({
-      role: message.role,
-      parts: [{ text: message.text }],
-    }));
 
     // Sesuaikan history jika tidak ada pesan sebelumnya
     const adjustedHistory =
