@@ -122,7 +122,14 @@ const fetchTodos = async () => {
 };
 
 const addTodo = async () => {
-  if (newTodo.value.trim() === "") {
+  const trimmedTodo = newTodo.value.trim();
+
+  if (trimmedTodo.length < 3 || trimmedTodo.length > 50) {
+    error.value = "Todo title must be between 3 and 50 characters.";
+    return;
+  }
+
+  if (trimmedTodo === "") {
     error.value = "Todo title cannot be empty";
     return;
   }
@@ -130,7 +137,7 @@ const addTodo = async () => {
   try {
     const { data, error: apiError } = await useFetch("/api/todos", {
       method: "POST",
-      body: { title: newTodo.value, priority: newPriority.value },
+      body: { title: trimmedTodo, priority: newPriority.value },
     });
 
     if (apiError.value) {
@@ -191,13 +198,20 @@ const saveEdit = async (todo: {
   title: string;
   priority: string;
 }) => {
+  const trimmedTitle = todo.title.trim();
+
+  if (trimmedTitle.length < 3 || trimmedTitle.length > 50) {
+    error.value = "Todo title must be between 3 and 50 characters.";
+    return;
+  }
+
   try {
     const { error: apiError } = await useFetch("/api/todos", {
       method: "PUT",
       body: {
         id: todo.id,
         completed: todo.completed,
-        title: todo.title,
+        title: trimmedTitle,
         priority: todo.priority,
       },
     });
@@ -251,6 +265,7 @@ const goToChatbot = () => {
   window.location.href = "/TodoChatBot";
 };
 </script>
+
 <style scoped>
 .line-through {
   text-decoration: line-through;
